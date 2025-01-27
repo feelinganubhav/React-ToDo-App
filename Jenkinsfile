@@ -90,10 +90,13 @@ pipeline {
             bat '''
             for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do (
                 if %%a NEQ 0 (
-                    tasklist /FI "PID eq %%a" | find "%%a" > nul && taskkill /pid %%a /f
+                    taskkill /pid %%a /f
+                    goto :break
                 )
             )
             '''
+            :break
+            echo "Exited the loop.."
         }
         success {
             echo 'Pipeline executed successfully!'
