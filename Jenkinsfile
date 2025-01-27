@@ -66,6 +66,9 @@ pipeline {
                     if (responseCode != '200') {
                         error "Post-deployment testing failed with HTTP status code: ${responseCode}"
                     }
+                    else {
+                        echo 'App is Up and Running Sucessfully...'
+                    }
                 }
             }
         }
@@ -74,7 +77,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up any running servers...'
-            bat 'for /f "tokens=5" %a in (\'netstat -ano ^| find ":3000"\') do taskkill /pid %a /f || exit /B 0'
+            bat '''for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do taskkill /pid %%a /f || exit /B 0'''
         }
         success {
             echo 'Pipeline executed successfully!'
