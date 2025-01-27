@@ -61,13 +61,15 @@ pipeline {
                 script {
                     def responseCode = bat(
                         script: "curl -o /dev/null -s -w '%%{http_code}' http://localhost:3000",
-                         returnStdout: true).trim()
+                        returnStdout: true
+                    ).trim()
 
-                    if (responseCode != '200') {
+                    echo "HTTP Response Code: ${responseCode}"
+
+                    if (responseCode == '200') {
+                        echo 'App is Up and Running Successfully...'
+                    } else {
                         error "Post-deployment testing failed with HTTP status code: ${responseCode}"
-                    }
-                    else {
-                        echo 'App is Up and Running Sucessfully...'
                     }
                 }
             }
@@ -77,7 +79,13 @@ pipeline {
     post {
         always {
             echo 'Cleaning up any running servers...'
-            bat '''for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do taskkill /pid %%a /f || exit /B 0'''
+            bat '''
+            for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do (
+                if %%a NEQ 0 (
+                    taskkill /pid %%a /f
+                )
+            )
+            '''
         }
         success {
             echo 'Pipeline executed successfully!'
