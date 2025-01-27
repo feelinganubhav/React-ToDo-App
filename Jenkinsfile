@@ -52,7 +52,7 @@ pipeline {
         stage('Start Server for Testing') {
             steps {
                 echo 'Starting the Server...'
-                bat 'start /B npx serve -s ${DEPLOY_DIR} -l 3000'
+                bat 'npx serve -s ${DEPLOY_DIR} -l 3000'
             }
         }
 
