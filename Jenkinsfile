@@ -59,18 +59,26 @@ pipeline {
         stage('Post-deployment Testing') {
             steps {
                 script {
-                    def responseCode = bat(
+                    def rawResponseCode = bat(
                         script: "curl -o /dev/null -s -w '%%{http_code}' http://localhost:3000",
                         returnStdout: true
-                    ).trim()
-
-                    echo "HTTP Response Code: ${responseCode}"
+                    )
+                    
+                    // Log the raw response for debugging
+                    echo "Raw Response Code: '${rawResponseCode}'"
+                    
+                    // Clean up response code to ensure it's only the number
+                    def responseCode = rawResponseCode.trim().replaceAll("[^0-9]", "")
+                    
+                    // Log the cleaned response code
+                    echo "Cleaned Response Code: '${responseCode}'"
 
                     if (responseCode == '200') {
                         echo 'App is Up and Running Successfully...'
                     } else {
                         error "Post-deployment testing failed with HTTP status code: ${responseCode}"
                     }
+
                 }
             }
         }
@@ -82,7 +90,7 @@ pipeline {
             bat '''
             for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do (
                 if %%a NEQ 0 (
-                    taskkill /pid %%a /f
+                    tasklist /FI "PID eq %%a" | find "%%a" > nul && taskkill /pid %%a /f
                 )
             )
             '''
