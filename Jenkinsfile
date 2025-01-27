@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DEPLOY_DIR = 'D:/React-ToDo-App-CI-CD-Deployment'
+        DEPLOY_DIR = 'D:\React-ToDo-App-CI-CD-Deployment'
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 echo 'Deploying the application...'
-                bat "del /q ${DEPLOY_DIR}"
+                bat "del /q ${DEPLOY_DIR}\*"
                 bat "xcopy dist ${DEPLOY_DIR} /E /I /H /Y"
             }
         }
