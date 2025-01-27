@@ -9,7 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning the React ToDo Application repository...'
-                git 'https://github.com/feelinganubhav/React-ToDo-App.git'
+                git branch: 'main', url: 'https://github.com/feelinganubhav/React-ToDo-App.git'
             }
         }
 
@@ -62,7 +62,7 @@ pipeline {
                     def responseCode = sh(
                         script: "curl -o /dev/null -s -w '%{http_code}' http://localhost:3000",
                          returnStdout: true).trim()
-                         
+
                     if (responseCode != '200') {
                         error "Post-deployment testing failed with HTTP status code: ${responseCode}"
                     }
