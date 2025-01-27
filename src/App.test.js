@@ -4,7 +4,7 @@ import App from './App';
 
 describe('App Component Tests', () => {
   beforeEach(() => {
-    localStorage.clear(); // Clear local storage before each test
+    localStorage.clear(); 
   });
 
   test('renders the app with the correct title', () => {
@@ -14,9 +14,9 @@ describe('App Component Tests', () => {
 
   test('adds a new todo', () => {
     render(<App />);
-    const input = screen.getByPlaceholderText(/Write Todo\.\.\./i); // Placeholder from TodoForm
-    const dateInput = screen.getByPlaceholderText(/Write Date\.\.\./i); // Placeholder for the date input
-    const button = screen.getByText(/Add/i); // Button text from TodoForm
+    const input = screen.getByPlaceholderText(/Write Todo\.\.\./i); 
+    const dateInput = screen.getByPlaceholderText(/Write Date\.\.\./i); 
+    const button = screen.getByText(/Add/i); 
 
     fireEvent.change(input, { target: { value: 'Test Todo' } });
     fireEvent.change(dateInput, { target: { value: '2025-01-31' } });
@@ -39,13 +39,13 @@ describe('App Component Tests', () => {
     screen.findByText(/Todo to Delete/i);
 
     expect(screen.getByDisplayValue(/Todo to Delete/i)).toBeInTheDocument();
-    screen.debug()
+    // screen.debug()
 
     // Delete the todo
-    const deleteButton = screen.getByText(/❌/i); // Delete button icon from TodoItem
+    const deleteButton = screen.getByText(/❌/i); 
     fireEvent.click(deleteButton);
 
-    screen.debug();
+    // screen.debug();
     expect(screen.queryByDisplayValue(/Todo to Delete/i)).not.toBeInTheDocument();
   });
 
@@ -61,22 +61,22 @@ describe('App Component Tests', () => {
     fireEvent.click(button);
 
     // Mark as completed
-    const checkbox = screen.getByRole('checkbox'); // Checkbox for marking todo as complete
+    const checkbox = screen.getByRole('checkbox'); 
     fireEvent.click(checkbox);
 
     // Check if it's marked as completed
     const completedTodo = screen.getByDisplayValue('Todo to Complete');
-    expect(completedTodo).toHaveClass('line-through'); // Class applied to completed todos
+    expect(completedTodo).toHaveClass('line-through'); 
   });
 
   test('loads todos from local storage', () => {
     const mockTodos = [
       { id: 1, todo: 'Stored Todo', completed: false, targetDate: '2025-01-31' },
     ];
-    localStorage.setItem('key', JSON.stringify(mockTodos)); // Key assumed to be 'todos'
+    localStorage.setItem('key', JSON.stringify(mockTodos)); 
 
     render(<App />);
-    screen.debug()
+    // screen.debug()
     expect(screen.getByDisplayValue(/Stored Todo/i)).toBeInTheDocument();
     expect(screen.getByDisplayValue('2025-01-31')).toBeInTheDocument();
   });

@@ -44,22 +44,22 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 echo 'Deploying the application...'
-                bat "rm -rf ${DEPLOY_DIR}/*"
-                bat "cp -r dist/* ${DEPLOY_DIR}/"
+                bat "del /q ${DEPLOY_DIR}/*"
+                bat "xcopy dist/* ${DEPLOY_DIR} /E /I /H /Y"
             }
         }
 
         stage('Start Server for Testing') {
             steps {
                 echo 'Starting the Server...'
-                bat 'npx serve -s build -l 3000 &'
+                bat 'start /B npx serve -s build -l 3000'
             }
         }
 
         stage('Post-deployment Testing') {
             steps {
                 script {
-                    def responseCode = sh(
+                    def responseCode = bat(
                         script: "curl -o /dev/null -s -w '%%{http_code}' http://localhost:3000",
                          returnStdout: true).trim()
 
@@ -74,7 +74,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up any running servers...'
-            bat "pkill -f 'serve -s build -l 3000' || exit /B 0"
+            bat 'for /f "tokens=5" %a in (\'netstat -ano ^| find ":3000"\') do taskkill /pid %a /f || exit /B 0'
         }
         success {
             echo 'Pipeline executed successfully!'
