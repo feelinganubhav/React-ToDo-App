@@ -91,12 +91,11 @@ pipeline {
             for /f "tokens=5" %%a in ('netstat -ano ^| find ":3000"') do (
                 if %%a NEQ 0 (
                     taskkill /pid %%a /f
-                    goto :break
+                    exit /b
                 )
             )
             '''
-            :break
-            echo "Exited the loop.."
+            
         }
         success {
             echo 'Pipeline executed successfully!'
