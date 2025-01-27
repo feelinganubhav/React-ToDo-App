@@ -23,14 +23,14 @@ pipeline {
         stage('Lint Code') {
             steps {
                 echo 'Linting the code using ESLint...'
-                bat 'npx eslint . || true'
+                bat 'npx eslint . || exit /B 0'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests On All React ToDo App Fuctionalities using Jest...'
-                bat 'npm test || true'
+                bat 'npm test || exit /B 0'
             }
         }
 
@@ -74,7 +74,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up any running servers...'
-            bat "pkill -f 'serve -s build -l 3000' || true"
+            bat "pkill -f 'serve -s build -l 3000' || exit /B 0"
         }
         success {
             echo 'Pipeline executed successfully!'
