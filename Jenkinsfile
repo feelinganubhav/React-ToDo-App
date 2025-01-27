@@ -44,7 +44,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 echo 'Deploying the application...'
-                bat 'del /q ${DEPLOY_DIR}\\*'
+                bat "del /q ${DEPLOY_DIR}\\*"
                 bat "xcopy dist ${DEPLOY_DIR} /E /I /H /Y"
             }
         }
