@@ -64,9 +64,11 @@ pipeline {
             steps {
                 script {
                     echo 'Testing the App if it is Running or NOT...'
-                    // Execute the curl command to fetch the HTTP status code
+                    
+                    echo 'Execute the curl command to fetch the HTTP status code'
                     def responseCode = bat(
                         script: """
+                        @echo off
                         curl -o NUL -s -w %%{http_code} http://localhost:3000
                         """,
                         returnStdout: true
