@@ -68,7 +68,7 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     
-                    echo "HTTP Response Code: '${responseCode}'"
+                    echo "HTTP Response Code: ${responseCode}"
 
                     // Check if the response code is 200
                     if (responseCode == '200') {
