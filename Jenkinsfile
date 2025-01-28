@@ -53,6 +53,10 @@ pipeline {
             steps {
                 echo 'Starting the Server...'
                 bat "start /B npx serve -s ${DEPLOY_DIR} -l 3000"
+
+                echo 'Waiting for a few seconds to allow the React app to start'
+                bat "powershell -Command 'Start-Sleep -Seconds 3'"
+
             }
         }
 
